@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.group.listattract.data.repos.Repository
 import com.group.listattract.data.repos.RepositoryImpl
+import com.group.listattract.view.main.MainViewModel
 
 class ViewModelFactory private constructor(private val repository: Repository) :
     ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = (
-            if (modelClass.isAssignableFrom(MainViewModel::class.java)) MainViewModel(repository)
+            if (modelClass.isAssignableFrom(MainViewModel::class.java)) MainViewModel(
+                repository
+            )
             else throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")) as T
 
     companion object {

@@ -5,6 +5,9 @@ import android.util.Log
 import com.group.listattract.data.DataCallback
 import com.group.listattract.model.Item
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val TAG = "RestTask"
 
@@ -22,7 +25,9 @@ class RestTask(private val handler: Handler, private val callback: DataCallback<
                         id = getString("id"),
                         albumId = getString("album_id"),
                         title = getString("title"),
-                        url = getString("url")
+                        url = getString("url"),
+                        time = SimpleDateFormat("dd-MMM-yyyy HH:mm", Locale.getDefault())
+                            .format(Date())
                     )
                 }
                 )

@@ -1,4 +1,4 @@
-package com.group.listattract.view
+package com.group.listattract.view.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
