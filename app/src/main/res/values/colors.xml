@@ -3,5 +3,5 @@
     <color name="colorPrimary">#3A913A</color>
     <color name="colorPrimaryDark">#043101</color>
     <color name="colorAccent">#FFFFFF</color>
-    <color name="recyclerBackground">#B9B9B9</color>
+    <color name="background">#B9B9B9</color>
 </resources>

@@ -1,8 +1,8 @@
 package com.group.listattract.view.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
@@ -10,7 +10,6 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -20,7 +19,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.group.listattract.R
 import com.group.listattract.model.Item
 import com.group.listattract.view.ViewModelFactory
+import com.group.listattract.view.description.DescriptionActivity
 import kotlinx.android.synthetic.main.activity_main.*
+
+const val ITEM_POSITION = "position"
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuItemClickListener,
     SearchView.OnQueryTextListener,
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance())
             .get(MainViewModel::class.java)
             .apply {
-                itemLiveData.observe(this@MainActivity, Observer {
+                itemsLiveData.observe(this@MainActivity, Observer {
                     if (it != null) (rvList.adapter as ItemAdapter).addItems(it)
                     else tvNoData.visibility = VISIBLE
                     switchProgressBar(false)
@@ -71,8 +73,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
     private fun intRecycler() {
         rvList.adapter = ItemAdapter(object : ItemHolder.OnItemClickListener<Item> {
             override fun onItemViewClick(view: View, item: Item) {
-                Log.d("MainActivity", "onItemViewClick: ${item.title}, ")
-                Toast.makeText(this@MainActivity, item.id, Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@MainActivity, DescriptionActivity::class.java)
+                intent.putExtra(ITEM_POSITION, item)
+                startActivity(intent)
             }
         })
     }

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.group.listattract.R
 import com.group.listattract.data.repos.RepositoryImpl
@@ -35,9 +36,9 @@ class ItemHolder(recyclerView: ViewGroup) :
         this.item = item
         containerView.tvName.text = item.title
         containerView.tvTime.text = item.time
+        val iv = containerView.ivImage
 
         RepositoryImpl.getInstance().loadImage(item.url) {
-            val iv = containerView.ivImage
             if (it != null) iv.setImageBitmap(it)
             else setPlaceHolder(iv)
         }
@@ -45,10 +46,10 @@ class ItemHolder(recyclerView: ViewGroup) :
 
     private fun setPlaceHolder(ivImage: ImageView) {
         ivImage.setImageDrawable(
-            containerView
-                .context
-                .resources
-                .getDrawable(R.drawable.ic_cloud_off_black_24dp)
+            ContextCompat.getDrawable(
+                ivImage.context,
+                R.drawable.ic_cloud_off_black_24dp
+            )
         )
     }
 

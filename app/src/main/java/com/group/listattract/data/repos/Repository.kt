@@ -5,5 +5,5 @@ import com.group.listattract.model.Item
 
 interface Repository {
     fun loadItems(callback: DataCallback<Item>)
-//    fun getItemDescription(callback: DataCallback<ItemDescription>)
+//    fun loadItemDescription(callback: DataCallback<ItemDescription>)
 }
