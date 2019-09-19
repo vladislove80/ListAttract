@@ -2,6 +2,7 @@ package com.group.listattract.view.main
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
@@ -39,6 +40,7 @@ class ItemHolder(recyclerView: ViewGroup) :
         val iv = containerView.ivImage
 
         RepositoryImpl.getInstance().loadImage(item.url) {
+            containerView.pbImage?.visibility= GONE
             if (it != null) iv.setImageBitmap(it)
             else setPlaceHolder(iv)
         }

@@ -2,13 +2,17 @@ package com.group.listattract.view.description
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.group.listattract.R
 import com.group.listattract.data.repos.RepositoryImpl
 import com.group.listattract.model.Item
-import kotlinx.android.synthetic.main.item.*
+import kotlinx.android.synthetic.main.fragment_item_description.*
+import kotlinx.android.synthetic.main.item.ivImage
+import kotlinx.android.synthetic.main.item.tvName
+import kotlinx.android.synthetic.main.item.tvTime
 
 class DescriptionItemFragment : Fragment(R.layout.fragment_item_description) {
 
@@ -20,6 +24,7 @@ class DescriptionItemFragment : Fragment(R.layout.fragment_item_description) {
         tvTime.text = item.time
 
         RepositoryImpl.getInstance().loadImage(item.url) {
+            pbImage?.visibility = GONE
             if (it != null) ivImage?.setImageBitmap(it)
             else setPlaceHolder(ivImage)
         }
