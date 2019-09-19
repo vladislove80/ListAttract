@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_one"
+        android:checkableBehavior="single">
+        <item android:title="Group One">
+            <menu>
+                <item
+                    android:id="@+id/nav_business"
+                    android:icon="@drawable/ic_business_black_24dp"
+                    android:title="Business" />
+                <item
+                    android:id="@+id/nav_walk"
+                    android:icon="@drawable/ic_directions_walk_black_24dp"
+                    android:title="Walk" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group_two"
+        android:checkableBehavior="single">
+        <item android:title="Group Two">
+            <menu>
+                <item
+                    android:id="@+id/nav_boat"
+                    android:icon="@drawable/ic_directions_boat_black_24dp"
+                    android:title="Boat" />
+                <item
+                    android:id="@+id/nav_gallery"
+                    android:icon="@drawable/ic_golf_course_black_24dp"
+                    android:title="Golf" />
+            </menu>
+        </item>
+    </group>
+</menu>

@@ -11,7 +11,7 @@ import com.group.listattract.model.Item
 import com.group.listattract.view.ViewModelFactory
 import com.group.listattract.view.main.ITEM_POSITION
 import kotlinx.android.synthetic.main.activity_description.*
-import kotlinx.android.synthetic.main.activity_main.tvNoData
+
 import java.io.Serializable
 
 class DescriptionActivity : AppCompatActivity(R.layout.activity_description) {
