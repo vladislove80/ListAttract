@@ -10,29 +10,53 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.navigation.NavigationView
 import com.group.listattract.R
 import com.group.listattract.model.Item
 import com.group.listattract.view.ViewModelFactory
 import com.group.listattract.view.description.DescriptionActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_content.*
 
 const val ITEM_POSITION = "position"
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuItemClickListener,
     SearchView.OnQueryTextListener,
-    SearchView.OnCloseListener {
+    SearchView.OnCloseListener,
+    NavigationView.OnNavigationItemSelectedListener {
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        Toast.makeText(this, "${item.title}", Toast.LENGTH_SHORT).show()
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
 
     private lateinit var viewModel: MainViewModel
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        val toggle = ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        val navigationView = findViewById<View>(R.id.navigation_view) as NavigationView
+        navigationView.setNavigationItemSelectedListener(this)
+
         setSearchView()
         initViewModel()
         intRecycler()
@@ -109,5 +133,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
     override fun onClose(): Boolean {
         (rvList.adapter as ItemAdapter).addNewItems(viewModel.getCachedItems())
         return false
+    }
+
+    override fun onBackPressed() {
+        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 }
