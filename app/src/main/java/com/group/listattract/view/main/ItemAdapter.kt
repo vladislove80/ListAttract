@@ -22,8 +22,28 @@ class ItemAdapter(private val listener: ItemHolder.OnItemClickListener<Item>) :
         holder.bindItem(items[position])
     }
 
-    fun addNewItems(newItems: MutableList<Item>) {
+    fun addItems(newItems: MutableList<Item>) {
         val isAdded = items.addAll(newItems)
         if (isAdded) notifyDataSetChanged()
+    }
+
+    fun addNewItems(newItems: MutableList<Item>) {
+        items.clear()
+        val isAdded = items.addAll(newItems)
+        if (isAdded) notifyDataSetChanged()
+    }
+
+    fun search(text: String) {
+        if (items.isNullOrEmpty()) clearItems()
+        else addNewItems(
+            items.filter {
+                it.title.contains(text, true)
+            }.toMutableList()
+        )
+    }
+
+    private fun clearItems() {
+        this.items.clear()
+        notifyDataSetChanged()
     }
 }

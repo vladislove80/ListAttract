@@ -10,10 +10,12 @@ import com.group.listattract.data.repos.Repository
 private const val TAG = "MainViewModel"
 class MainViewModel(private val repository: Repository) : ViewModel() {
     val itemLiveData: MutableLiveData<MutableList<Item>?> = MutableLiveData()
+    lateinit var dataList: MutableList<Item>
 
     fun getItem() {
-        repository.getItems(object : DataCallback<Item> {
+        repository.loadItems(object : DataCallback<Item> {
             override fun onCompleted(data: MutableList<Item>) {
+                dataList = data
                 itemLiveData.postValue(data)
             }
 
@@ -23,4 +25,6 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             }
         })
     }
+
+    fun getCachedItems() = if (::dataList.isInitialized) dataList else mutableListOf()
 }

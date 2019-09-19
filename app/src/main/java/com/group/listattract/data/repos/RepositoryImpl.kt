@@ -19,7 +19,7 @@ class RepositoryImpl private constructor() : Repository {
         uiHandler = Handler(Looper.getMainLooper())
     }
 
-    override fun getItems(callback: DataCallback<Item>) {
+    override fun loadItems(callback: DataCallback<Item>) {
         executorService.execute(RestTask(uiHandler, callback))
     }
 
@@ -27,7 +27,7 @@ class RepositoryImpl private constructor() : Repository {
         executorService.execute(ImageLoadTask(uiHandler, url, onLoaded))
     }
 
-    /*    override fun getItemDescription(callback: DataCallback<ItemDescription>) {
+    /*    override fun loadItemDescription(callback: DataCallback<ItemDescription>) {
             executorService.execute(RestTask(uiHandler, callback))
         }*/
     companion object {
@@ -38,11 +38,6 @@ class RepositoryImpl private constructor() : Repository {
             INSTANCE ?: RepositoryImpl().also {
                 INSTANCE = it
             }
-        }
-
-        @JvmStatic
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }
