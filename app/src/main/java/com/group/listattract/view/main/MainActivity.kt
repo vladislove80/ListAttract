@@ -2,6 +2,7 @@ package com.group.listattract.view.main
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration.*
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Toast.makeText(this, "${item.title}", Toast.LENGTH_SHORT).show()
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawer.closeDrawer(GravityCompat.START)
+        if (!isTablet()) drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -48,41 +49,65 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDrawer()
-        setSearchView()
+        setToolbarWithSearchView()
         initViewModel()
         intRecycler()
     }
 
     private fun setDrawer() {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
+        if (!isTablet() || resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+            val toggle = ActionBarDrawerToggle(
+                this,
+                drawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+            )
+            drawer.addDrawerListener(toggle)
+            toggle.syncState()
+        }
 
         val navigationView = findViewById<View>(R.id.navigation_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
     }
 
-    private fun setSearchView() {
+    private fun setToolbarWithSearchView() {
         toolbar.inflateMenu(R.menu.main_menu)
         toolbar.setOnMenuItemClickListener(this)
+
+        if (isTablet() && resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
+            toolbar.getChildAt(0).setPadding( //set padding for toolbar title view
+                resources.getDimension(R.dimen.main_content_padding_left).toInt(),
+                0,
+                0,
+                0
+            )
+        }
         with(toolbar.menu.findItem(R.id.search).actionView as SearchView) {
             maxWidth = android.R.attr.width
             setOnQueryTextListener(this@MainActivity)
             setOnCloseListener(this@MainActivity)
+            if (isTablet() && resources.configuration.orientation == ORIENTATION_LANDSCAPE) setPadding(//set padding for toolbar search view
+                resources.getDimension(R.dimen.main_content_padding_left).toInt(),
+                0,
+                0,
+                0
+            )
 
-            (findViewById<EditText>(androidx.appcompat.R.id.search_src_text)).apply {
-                hint = resources.getString(R.string.search)
-                setHintTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
-                setTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorAccent))
-            }
-
+            setSearchEditText()
             val closeBtn = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             closeBtn.setImageResource(R.drawable.ic_search_close)
         }
     }
+
+    private fun SearchView.setSearchEditText() =
+        (findViewById<EditText>(androidx.appcompat.R.id.search_src_text)).apply {
+            hint = resources.getString(R.string.search)
+            val color = ContextCompat.getColor(this@MainActivity, R.color.colorAccent)
+            setHintTextColor(color)
+            setTextColor(color)
+        }
 
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance())
@@ -143,10 +168,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
 
     override fun onBackPressed() {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START) && !isTablet()) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun isTablet(): Boolean {
+        return resources.configuration.screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_LARGE
     }
 }
