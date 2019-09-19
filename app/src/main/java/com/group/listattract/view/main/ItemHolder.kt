@@ -3,7 +3,7 @@ package com.group.listattract.view.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.group.listattract.R
@@ -37,9 +37,19 @@ class ItemHolder(recyclerView: ViewGroup) :
         containerView.tvTime.text = item.time
 
         RepositoryImpl.getInstance().loadImage(item.url) {
-            val ivImage = containerView.ivImage
-            ivImage.setImageBitmap(it)
+            val iv = containerView.ivImage
+            if (it != null) iv.setImageBitmap(it)
+            else setPlaceHolder(iv)
         }
+    }
+
+    private fun setPlaceHolder(ivImage: ImageView) {
+        ivImage.setImageDrawable(
+            containerView
+                .context
+                .resources
+                .getDrawable(R.drawable.ic_cloud_off_black_24dp)
+        )
     }
 
     override fun onClick(v: View) {
