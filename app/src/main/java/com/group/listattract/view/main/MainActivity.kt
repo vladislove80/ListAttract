@@ -1,19 +1,16 @@
 package com.group.listattract.view.main
 
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration.*
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -24,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
 import com.group.listattract.R
 import com.group.listattract.model.Item
+import com.group.listattract.view.BaseActivity
 import com.group.listattract.view.ViewModelFactory
 import com.group.listattract.view.description.DescriptionActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +29,7 @@ import kotlinx.android.synthetic.main.main_content.*
 
 const val ITEM_POSITION = "position"
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuItemClickListener,
+class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemClickListener,
     SearchView.OnQueryTextListener,
     SearchView.OnCloseListener,
     NavigationView.OnNavigationItemSelectedListener {
@@ -133,17 +131,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
         })
     }
 
-    private fun switchProgressBar(flag: Boolean) {
-        progressBar.visibility = if (flag) VISIBLE else GONE
-    }
-
-    private fun hideSoftKeyboard(view: View?) {
-        view?.postDelayed({
-            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }, 50L)
-    }
-
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return false
     }
@@ -173,9 +160,5 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), Toolbar.OnMenuIt
         } else {
             super.onBackPressed()
         }
-    }
-
-    private fun isTablet(): Boolean {
-        return resources.configuration.screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_LARGE
     }
 }
