@@ -3,7 +3,7 @@ package com.group.listattract.data.repos
 import java.util.concurrent.*
 
 private const val SCALE_POOL_SIZE = 4
-private const val KEEP_ALIVE_TIME = 15
+private const val KEEP_ALIVE_TIME = 15L
 
 class TaskExecutor : Executor {
 
@@ -18,7 +18,7 @@ class TaskExecutor : Executor {
         val threadFactory = JobThreadFactory()
         this.threadPoolExecutor = ThreadPoolExecutor(
             initialPoolSize, maxPoolSize,
-            KEEP_ALIVE_TIME.toLong(), keepAliveTimeUnit, workQueue, threadFactory
+            KEEP_ALIVE_TIME, keepAliveTimeUnit, workQueue, threadFactory
         )
     }
 

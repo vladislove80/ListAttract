@@ -12,15 +12,15 @@ class RestTask(private val handler: Handler, private val callback: DataCallback<
     override fun run() {
         val link =
             "https://gorest.co.in/public-api/photos?_format=json&access-token=jeB68kcRLw9kUwnTOVFbfNKCQZ_cvuQRprDX"
-        val jObj = RestClient.getInstance().createCall(link)
-        if (jObj != null) {
-            val jsonArray = jObj.getJSONArray("result")
+        val jsonObject = RestClient.getInstance().createCall(link)
+        if (jsonObject != null) {
+            val jsonArray = jsonObject.getJSONArray("result")
             val items = parseJsonArray(jsonArray)
             handler.post {
                 callback.onCompleted(items)
             }
         } else handler.post {
-            callback.onError(Throwable("RestClient return null on call"))
+            callback.onError(Throwable("RestClient return null on call: $link"))
         }
 
     }
@@ -36,11 +36,12 @@ class RestTask(private val handler: Handler, private val callback: DataCallback<
 
     private fun mapJSONObjectToItem(jsonArray: JSONArray, i: Int): Item {
         val jsonObject = jsonArray.getJSONObject(i)
+        fun getStringFromJson(name: String) = jsonObject.getString(name)
         return Item(
-            id = jsonObject.getString("id"),
-            albumId = jsonObject.getString("album_id"),
-            title = jsonObject.getString("title"),
-            url = jsonObject.getString("url"),
+            id = getStringFromJson("id"),
+            albumId = getStringFromJson("album_id"),
+            title = getStringFromJson("title"),
+            url = getStringFromJson("url"),
             time = SimpleDateFormat("dd-MMM-yyyy HH:mm", Locale.getDefault()).format(
                 Date()
             )

@@ -13,7 +13,7 @@ class ImageLoadTask(
     private val onLoad: (Bitmap?) -> Unit
 ) : Runnable {
     override fun run() {
-        val mIcon11: Bitmap? = try {
+        val bitmap: Bitmap? = try {
             val imgStream = RestClient.getInstance().getStreamFrom(url)
             BitmapFactory.decodeStream(imgStream)
         } catch (e: Exception) {
@@ -21,7 +21,7 @@ class ImageLoadTask(
             null
         }
         uiHandler.post {
-            onLoad.invoke(mIcon11)
+            onLoad.invoke(bitmap)
         }
     }
 }
