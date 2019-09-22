@@ -79,6 +79,10 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
             )
         }
 
+        setSearchView()
+    }
+
+    private fun setSearchView() {
         searchView = toolbar.menu.findItem(R.id.search).actionView as SearchView
         with(searchView) {
             maxWidth = android.R.attr.width
@@ -92,8 +96,8 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
             )
 
             setSearchEditText()
-            val closeBtn = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-            closeBtn.setImageResource(R.drawable.ic_search_close)
+            findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+                .setImageResource(R.drawable.ic_search_close)
         }
     }
 
@@ -115,7 +119,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
                     switchProgressBar(false)
                 })
             }.also {
-                it.getItem()
+                if (!it.isSearchEnable) it.getItem()
             }
     }
 
@@ -141,13 +145,17 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
 
     override fun onQueryTextChange(newText: String?): Boolean {
         newText?.let {
-            (rvList.adapter as ItemAdapter).search(it)
+            (rvList?.adapter as ItemAdapter).search(it)
+            viewModel.isSearchEnable = true
         }
         return true
     }
 
     override fun onClose(): Boolean {
-        (rvList.adapter as ItemAdapter).addNewItems(viewModel.getCachedItems())
+        with(viewModel) {
+            (rvList.adapter as ItemAdapter).addNewItems(this.getCachedItems())
+            this.isSearchEnable = false
+        }
         return false
     }
 

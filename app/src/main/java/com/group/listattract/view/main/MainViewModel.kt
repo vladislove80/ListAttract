@@ -12,6 +12,7 @@ private const val TAG = "MainViewModel"
 class MainViewModel(private val repository: Repository) : ViewModel() {
     val itemsLiveData: MutableLiveData<MutableList<Item>?> = MutableLiveData()
     lateinit var dataList: MutableList<Item>
+    var isSearchEnable = false
 
     fun getItem() {
         repository.loadItems(object : DataCallback<Item> {
