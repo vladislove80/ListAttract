@@ -1,8 +1,6 @@
 package com.group.listattract.view.main
 
 import android.content.Intent
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -54,27 +52,25 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
 
     private fun setDrawer() {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (!isTablet() || resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-            val toggle = ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-            )
-            drawer.addDrawerListener(toggle)
-            toggle.syncState()
-        }
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawer,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
 
-        val navigationView = findViewById<View>(R.id.navigation_view) as NavigationView
-        navigationView.setNavigationItemSelectedListener(this)
+        (findViewById<View>(R.id.navigation_view) as NavigationView)
+            .setNavigationItemSelectedListener(this)
     }
 
     private fun setToolbarWithSearchView() {
         toolbar.inflateMenu(R.menu.main_menu)
         toolbar.setOnMenuItemClickListener(this)
 
-        if (isTablet() && resources.configuration.orientation == ORIENTATION_LANDSCAPE) {
+        if (isTablet()) {
             toolbar.getChildAt(0).setPadding( //set padding for toolbar title view
                 resources.getDimension(R.dimen.main_content_padding_left).toInt(),
                 0,
@@ -82,11 +78,13 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
                 0
             )
         }
-        with(toolbar.menu.findItem(R.id.search).actionView as SearchView) {
+
+        searchView = toolbar.menu.findItem(R.id.search).actionView as SearchView
+        with(searchView) {
             maxWidth = android.R.attr.width
             setOnQueryTextListener(this@MainActivity)
             setOnCloseListener(this@MainActivity)
-            if (isTablet() && resources.configuration.orientation == ORIENTATION_LANDSCAPE) setPadding(//set padding for toolbar search view
+            if (isTablet()) setPadding(//set padding for toolbar search view
                 resources.getDimension(R.dimen.main_content_padding_left).toInt(),
                 0,
                 0,
@@ -136,7 +134,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        searchView.clearFocus()
+        if (::searchView.isInitialized) searchView.clearFocus()
         hideSoftKeyboard(searchView)
         return true
     }
