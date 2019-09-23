@@ -22,6 +22,7 @@ class DescriptionItemFragment : Fragment(R.layout.fragment_item_description) {
 
         tvName.text = item.title
         tvTime.text = item.time
+        tvDesc.text = item.desc
 
         RepositoryImpl.getInstance().loadImage(item.url) {
             pbImage?.visibility = GONE

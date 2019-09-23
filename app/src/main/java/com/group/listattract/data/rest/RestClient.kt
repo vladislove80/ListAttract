@@ -2,16 +2,15 @@ package com.group.listattract.data.rest
 
 import android.util.Log
 import org.json.JSONException
-import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
 class RestClient {
-    fun createCall(link: String): JSONObject? {
+    fun createCall(link: String): String? {
         val urlConnection = URL(link).openConnection() as HttpURLConnection
         return try {
-            JSONObject(getJSONStringFrom(urlConnection))
+            getJSONStringFrom(urlConnection)
         } catch (e: JSONException) {
             Log.e("JSON Parser", "Error parsing data $e")
             null
