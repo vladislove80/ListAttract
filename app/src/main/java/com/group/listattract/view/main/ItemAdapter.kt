@@ -22,11 +22,6 @@ class ItemAdapter(private val listener: ItemHolder.OnItemClickListener<Item>) :
         holder.bindItem(items[position])
     }
 
-    fun addItems(newItems: MutableList<Item>) {
-        val isAdded = items.addAll(newItems)
-        if (isAdded) notifyDataSetChanged()
-    }
-
     fun addNewItems(newItems: MutableList<Item>) {
         items.clear()
         val isAdded = items.addAll(newItems)

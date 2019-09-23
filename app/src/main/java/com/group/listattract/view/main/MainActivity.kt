@@ -114,7 +114,7 @@ class MainActivity : BaseActivity(R.layout.activity_main), Toolbar.OnMenuItemCli
             .get(MainViewModel::class.java)
             .apply {
                 itemsLiveData.observe(this@MainActivity, Observer {
-                    if (it != null) (rvList.adapter as ItemAdapter).addItems(it)
+                    if (it != null) (rvList.adapter as ItemAdapter).addNewItems(it)
                     else tvNoData.visibility = VISIBLE
                     switchProgressBar(false)
                 })
